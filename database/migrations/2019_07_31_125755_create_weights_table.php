@@ -14,23 +14,23 @@ class CreateWeightsTable extends Migration
     public function up()
     {
         Schema::create('weights', function (Blueprint $table) {
-            
-        $table->bigIncrements('id');
-        $table->bigInteger('user_id')->unsigned();// при создании внешнего ключа,
-        // указывающего на автоматическое числовое поле,делаем указывающее поле 
-        // (поле внешнего ключа) 
-        // типа UNSIGNED.
+
+            $table->bigIncrements('id');
+            $table->bigInteger('user_id')->unsigned();// при создании внешнего ключа,
+            // указывающего на автоматическое числовое поле,делаем указывающее поле
+            // (поле внешнего ключа)
+            // типа UNSIGNED.
             $table->Integer('value');
             $table->text('remark')->nullable(true);
             $table->timestamps();
         });
-         Schema::table('weights', function (Blueprint $table) {
-         //связываем пользователя с его данными внешним ключом    
-        $table->foreign('user_id')->references('id')->on('users');
-             //удаляя пользователя, удаляется вся инфа, которая с ним связана
-             $table->foreign('user_id')->references('id')->on('users')
-                 ->onDelete('cascade');
-         });
+        Schema::table('weights', function (Blueprint $table) {
+            //связываем пользователя с его данными внешним ключом
+         //   $table->foreign('user_id')->references('id')->on('users');
+            //удаляя пользователя, удаляется вся инфа, которая с ним связана
+            $table->foreign('user_id')->references('id')->on('users')
+                ->onDelete('cascade');
+        });
 
 
     }
@@ -44,6 +44,6 @@ class CreateWeightsTable extends Migration
     {
         Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('weights');
-           //
+        //
     }
 }
