@@ -14,7 +14,7 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->bigIncrements('id')->unsigned();
             $table->string('name')->unique();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
@@ -31,9 +31,9 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-    DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-    Schema::dropIfExists('tableName');
-    DB::statement('SET FOREIGN_KEY_CHECKS = 1');
+   // DB::statement('SET FOREIGN_KEY_CHECKS = 0');
+        Schema::dropIfExists('users');
+   // DB::statement('SET FOREIGN_KEY_CHECKS = 1');
       //  Schema::dropIfExists('users');
       
     }

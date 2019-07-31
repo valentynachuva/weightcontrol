@@ -27,12 +27,12 @@ class CreateWeightsTable extends Migration
          Schema::table('weights', function (Blueprint $table) {
          //связываем пользователя с его данными внешним ключом    
         $table->foreign('user_id')->references('id')->on('users');
+             //удаляя пользователя, удаляется вся инфа, которая с ним связана
+             $table->foreign('user_id')->references('id')->on('users')
+                 ->onDelete('cascade');
          });
-        //удаляя пользователя, удаляется вся инфа, которая с ним связана
-        Schema::table('weights', function (Blueprint $table){
-        $table->foreign('user_id')->references('id')->on('users')
-         ->onDelete('cascade');
-        });
+
+
     }
 
     /**
