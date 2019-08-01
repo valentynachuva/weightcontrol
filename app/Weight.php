@@ -9,6 +9,7 @@ class Weight extends Model
     protected $fillable = [
         'value',
         'remark',
+        'user_id'
         
     ];
 }
