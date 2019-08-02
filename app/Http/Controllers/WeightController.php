@@ -2,38 +2,43 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use App\Repository\WeightRepository;
 use App\Repository\WeightRepositoryInterface;
 use Illuminate\Http\Request;
 
 class WeightController extends Controller
 {
-private $weightRepository;
+    private $weightRepository;
 
 
-public function __construct(WeightRepository $weightRepository)
- {
- $this->middleware('auth:api');
-$this->weightRepository=$weightRepository;
-
-}
-  public function store(Request $request)
+    public function __construct(WeightRepositoryInterface $weightRepository)
     {
-      $user = Auth::user();
-    // dd($user);
-    $this->validate($request, [
+        $this->middleware('jwt.auth');
+        $this->weightRepository = $weightRepository;
+    }
+
+    public function store(Request $request)
+    {
+        $user = Auth::user();
+        $this->validate($request, [
           'value' => 'required',
         ]);
-    $weightRepository= json_decode(json_encode($this->weightRepository), True);
-   
-          $weight = $this->weightRepository->addWeight($weightRepository);
-        
-              unset($weight->id);
-            unset($weight->created_at);
-            unset($weight->updated_at);
-               
-              $result = $weight;
-             return response()->json($result);
+
+        // TODO Не совсем понятна магия с json_decode json_encode
+        //$weightRepository= json_decode(json_encode($this->weightRepository), true);
+
+        $weightId = $this->weightRepository->addWeight([
+            'value' => request('value'),
+            'remark' => request('remark'),
+            //TODO у тебя уже есть user еще раз его дергать не надо
+            'user_id' => $user->id
+        ]);
+
+        //TODO так как мы делаем API и этот метода на создание ресурса, то надо вернуть 201 и заголовок Location
+        return response()->json(null, Response::HTTP_CREATED, [
+            //TODO еще будет меняться когда будет у тебя роут на получения веса по ID
+            'Location' => $weightId
+        ]);
     }
 }

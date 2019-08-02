@@ -1,14 +1,15 @@
 <?php
 namespace App\Repository;
+
 use \App\Weight;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
 
+class WeightRepository implements WeightRepositoryInterface
+{
+    //TODO  Это здесь не нужно, ибо при каждом вызове будет чиститься БД
+    //use RefreshDatabase;
 
-
-class WeightRepository implements WeightRepositoryInterface {
-    
-   use RefreshDatabase;
     /**
      * @var Weight
 
@@ -19,24 +20,25 @@ class WeightRepository implements WeightRepositoryInterface {
     {
         $this->model = app(Weight::class);
     }
-    public function addWeight(array $data): array
-    {
-     //   $data = $this->toDbArray($data);
-      //  dd($data);
-      //  $this->model->create($data);
-        
-          $weight= \App\Weight::create([
 
-   $data= 'value' => request('value'),
-  $data=  'remark' => request('remark'),
-  $data= 'user_id' => Auth::user()->id
-]);
-  $array = json_decode(json_encode($weight), True);
-        return $array;
+    /**
+     * TODO Логика работы в корне не верна в это месте
+     * TODO пускай возвращает тип int (ID вставленной записи
+     *
+     * @param array $data
+     * @return int
+     */
+    public function addWeight(array $data): int
+    {
+        //TODO Просто сохраняй данные здесь и все
+
+        // TODO поскольку у тебя уже есть модель, фасад для создания записи можешь не использовать
+        $this->model->fill($data)->save();
+        return $this->model->id;
     }
   
    
-  //   private function toDbArray(array $apiResponse): array
+    //   private function toDbArray(array $apiResponse): array
   //  {
    ///     return [
      //       'value' => $apiResponse['Value'],
