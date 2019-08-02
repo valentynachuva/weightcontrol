@@ -1,15 +1,14 @@
 <?php
-namespace App\Repository;
-use \App\Weight;
- 
-interface WeightRepositoryInterface {
-  public function findById(int $id): ?Weight;
 
+namespace App\Repository;
+
+interface WeightRepositoryInterface
+{
     /**
      * Добавляет вес в БД
      *
      * @param array $data
-     * @return array
+     * @return int
      */
-    public function addWeight(array $data): array;
+    public function addWeight(array $data): int;
 }

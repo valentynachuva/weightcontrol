@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Schema;
 use App\Repository\WeightRepositoryInterface;
 use App\Repository\WeightRepository;
 
-
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -27,9 +26,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-         $this->app->bind(\App\Repository\WeightRepositoryInterface::class,
-         \App\Repository\WeightRepository::class);
+        $this->app->bind(
+             \App\Repository\WeightRepositoryInterface::class,
+             \App\Repository\WeightRepository::class
+         );
         \Illuminate\Support\Facades\Schema::defaultStringLength(191);
-        
     }
 }
