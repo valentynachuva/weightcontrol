@@ -36,4 +36,14 @@ $this->weightRepository=$weightRepository;
               $result = $weight;
              return response()->json($result);
     }
+   
+    
+     public function update(Request $request)
+    {
+      $user = Auth::user();
+       // dd($user);
+        $this->validate($request, [
+           'id' => 'required'
+        ]);
+    }
 }

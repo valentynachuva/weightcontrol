@@ -1,5 +1,6 @@
 <?php
 namespace App\Repository;
+
 use \App\Weight;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
@@ -34,14 +35,10 @@ class WeightRepository implements WeightRepositoryInterface {
   $array = json_decode(json_encode($weight), True);
         return $array;
     }
-  
+public function findById(int $id): ?Weight
+    {
+     $data = $this->model->where('id'=> request('id'))->first();
+        return $data;
+}
    
-  //   private function toDbArray(array $apiResponse): array
-  //  {
-   ///     return [
-     //       'value' => $apiResponse['Value'],
-   //         'remark' => $apiResponse['Remark'],
-      //      'user_id' => Auth::user()->id
-     //   ];
-   // }
 }

@@ -31,3 +31,4 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::post('/store', 'WeightController@store')->name('create_weight');
+Route::put('/update', 'WeightController@update')->name('update');

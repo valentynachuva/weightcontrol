@@ -3,7 +3,7 @@ namespace App\Repository;
 use \App\Weight;
  
 interface WeightRepositoryInterface {
-   //public function findFilmByTitle(string $title): ?Films;
+  public function findById(int $id): ?Weight;
 
     /**
      * Добавляет вес в БД
