@@ -36,9 +36,10 @@ class WeightRepository implements WeightRepositoryInterface
         $this->model->fill($data)->save();
         return $this->model->id;
     }
-public function findById(int $id): ?Weight
+    public function findWeightId(int $id):array
     {
-     $data = $this->model->where('id'=> request('id'))->first();
-        return $data;
+         $weightId = Weight::find($id)->first();
+         return $weightId;
+    }
 }
    

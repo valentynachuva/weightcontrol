@@ -11,4 +11,5 @@ interface WeightRepositoryInterface
      * @return int
      */
     public function addWeight(array $data): int;
+    public function findWeightId(int $id):array;
 }
