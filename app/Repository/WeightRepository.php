@@ -36,10 +36,22 @@ class WeightRepository implements WeightRepositoryInterface
         $this->model->fill($data)->save();
         return $this->model->id;
     }
-    public function findWeightId(int $id):array
+    public function findWeightId(int $id): Weight
     {
-         $weightId = Weight::find($id)->first();
+        $weightId = Weight::findOrFail($id);
+        
          return $weightId;
+    }
+    public function updateWeightId(int $id): \App\Weight
+    {
+         $weightId = \App\Weight::findOrFail($id);
+        
+            return $weightId;
+    }
+    public function deleteWeightId(int $id): \App\Weight
+    {
+         $weight= \App\Weight::findOrFail($id);
+         return $weight;
     }
 }
    

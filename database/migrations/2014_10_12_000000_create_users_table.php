@@ -22,6 +22,9 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
+         Schema::table('users', function (Blueprint $table) {
+        $table->string('api_token', 60)->unique()->nullable();
+    });
     }
 
     /**
@@ -33,6 +36,9 @@ class CreateUsersTable extends Migration
     {
   // DB::statement('SET FOREIGN_KEY_CHECKS = 0');
         Schema::dropIfExists('users');
+         Schema::table('users', function (Blueprint $table) {
+        $table->dropColumn(['api_token']);
+    });
    // DB::statement('SET FOREIGN_KEY_CHECKS = 1');
       //  Schema::dropIfExists('users');
       
