@@ -18,6 +18,7 @@ class AuthController extends Controller
     public function __construct()
     {
         $this->middleware('auth:api', ['except' => ['login', 'registration']]);
+         $this->middleware('jwt.refresh')->only('refresh');;
     }
 
     /**
@@ -82,7 +83,14 @@ class AuthController extends Controller
      */
     public function refresh()
     {
-        return $this->respondWithToken(auth()->refresh());
+         $token = (string)JWTAuth::getToken();
+
+    $token = JWTAuth::setToken($token)->invalidate();
+
+    $newToken = JWTAuth::refresh($token);
+
+    return response()->respondWithToken(['message'=>  $newToken]);
+     //  return $this->respondWithToken(auth()->refresh());
     }
 
     /**

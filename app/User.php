@@ -1,14 +1,14 @@
 <?php
 
 namespace App;
-
+//use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use Notifiable;
+    use  Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -50,4 +50,6 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+   
 }
+
