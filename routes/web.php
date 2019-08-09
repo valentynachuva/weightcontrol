@@ -23,7 +23,6 @@ Route::group([
 
     Route::post('login', 'AuthController@login');
     Route::post('registration', 'AuthController@registration');
-    Route::post('logout', 'AuthController@logout');
     Route::post('refresh', 'AuthController@refresh');
     Route::post('me', 'AuthController@me');
     
@@ -32,9 +31,6 @@ Route::group([
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-//Route::post('/store', 'WeightController@store')->name('create_weight');
-//Route::get('/store', 'WeightController@store')->name('create_weight');
-//Route::put('/update', 'WeightController@update')->name('update');
 Route::group(['middleware' => 'auth:api'], function() {
 Route::get('weights', 'WeightController@index');
 Route::get('weights/{id}', 'WeightController@show');
@@ -42,4 +38,5 @@ Route::post('weights', 'WeightController@store');
 Route::put('weights/{id}', 'WeightController@update');
 Route::delete('weights/{id}', 'WeightController@delete');
 Route::get('number/{id}', 'WeightController@findLastNumberWeight');
+Route::get('/dates', 'WeightController@dates');
 });

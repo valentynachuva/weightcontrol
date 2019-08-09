@@ -5,55 +5,20 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-
+use App\User;
 class RegisterTest extends TestCase
 {
     public function testsRegistersSuccessfully()
     {
-        $payload = [
-            'name' => 'John',
-            'email' => 'john@toptal.com',
+      $user=[
+            'name' => 'Molly',
+            'email' => 'molly@toptal.com',
             'password' => '123456789',
-            'password_confirmation' => '123456789',
         ];
-
-        $this->json('post', '/auth/registration', $payload)
-            ->assertStatus(201)
-            ->assertJsonStructure([
-                'data' => [
-                    'id',
-                    'name',
-                    'email',
-                    'created_at',
-                    'updated_at',
-                   
-                ],
-            ]);
+           
+//dd($user);
+      $this->json('post', '/auth/registration', $user)
+            ->assertStatus(201);
     }
 
-    public function testsRequiresPasswordEmailAndName()
-    {
-        $this->json('post', '/auth/registration')
-            ->assertStatus(422)
-            ->assertJson([
-                'name' => ['The name field is required.'],
-                'email' => ['The email field is required.'],
-                'password' => ['The password field is required.'],
-            ]);
-    }
-
-    public function testsRequirePasswordConfirmation()
-    {
-        $payload = [
-            'name' => 'John',
-            'email' => 'john@toptal.com',
-            'password' => 'toptal123',
-        ];
-
-        $this->json('post', '/auth/registration', $payload)
-            ->assertStatus(422)
-            ->assertJson([
-                'password' => ['The password confirmation does not match.'],
-            ]);
-    }
 }

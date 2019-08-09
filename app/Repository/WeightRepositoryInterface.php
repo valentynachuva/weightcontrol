@@ -4,17 +4,18 @@ namespace App\Repository;
 
 interface WeightRepositoryInterface
 {
-    /**
-     * Добавляет вес в БД
-     *
-     * @param array $data
-     * @return int
-     */
-    
-    public function viewAllWeights(int $id):array;
+   
+    public function viewAllWeights(int $userId): \Illuminate\Database\Eloquent\Collection;
+
     public function addWeight(array $data): int;
-    public function findWeightId(int $id): array;
-    public function updateWeightId(int $id): array;
-    public function deleteWeightId(int $id): array;
-    public function lastNumberWeights(int $userId, int $numberId):array;
+
+    public function findWeightId(int $id, int $userId): \Illuminate\Database\Eloquent\Collection;
+
+    public function updateWeightId(int $id): ?\App\Weight; //? - возвращает значение либо null, либо результат
+
+    public function deleteWeightId(int $id);
+
+    public function lastNumberWeights(int $userId, int $numberId): \Illuminate\Database\Eloquent\Collection;
+
+    public function weightsBetweenDates(int $userId, array $data): \Illuminate\Database\Eloquent\Collection;
 }

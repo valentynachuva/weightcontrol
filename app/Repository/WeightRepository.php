@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Repository;
 
 use \App\Weight;
@@ -11,12 +12,9 @@ use Illuminate\Http\Response;
 
 class WeightRepository implements WeightRepositoryInterface
 {
-    //TODO  Это здесь не нужно, ибо при каждом вызове будет чиститься БД
-    //use RefreshDatabase;
 
     /**
      * @var Weight
-
      */
     private $model;
 
@@ -26,63 +24,91 @@ class WeightRepository implements WeightRepositoryInterface
     }
 
     /**
-     * TODO Логика работы в корне не верна в это месте
-     * TODO пускай возвращает тип int (ID вставленной записи
+     *
+     * @param int $userId
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function viewAllWeights(int $userId): \Illuminate\Database\Eloquent\Collection
+    {
+        $weight = Weight::where('user_id', $userId)->get();
+
+        return $weight;
+    }
+
+    /**
+     *
+     * @param int $id
+     * @param int $userId
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function findWeightId(int $id, int $userId): \Illuminate\Database\Eloquent\Collection
+    {
+        $weightId = Weight::findOrFail($id)->id;
+        $weight = Weight::where('user_id', $userId)->where('id', $weightId)->get();
+
+        return $weight;
+    }
+
+    /**
      *
      * @param array $data
      * @return int
      */
     public function addWeight(array $data): int
     {
-        //TODO Просто сохраняй данные здесь и все
-
-        // TODO поскольку у тебя уже есть модель, фасад для создания записи можешь не использовать
         $this->model->fill($data)->save();
         return $this->model->id;
     }
-    public function findWeightId(int $id): array
-        
+
+    /**
+     *
+     * @param int $id
+     * @return Weight
+     */
+    public function updateWeightId(int $id): ?\App\Weight
     {
-    $weightId = Weight::findOrFail($id)->id;
-  
-      $users = DB::table('users')
-        ->join('weights', 'users.id', '=', 'weights.user_id')
-           ->select('users.name', 'users.email','weights.id as weightId', 'users.created_at', 'users.updated_at', 'weights.value as weight', 'weights.remark')
-            ->where('weights.id','=',$weightId) 
-      
-          ->get();
-            $weight = json_decode(json_encode($users), true);
-         return $weight;
+        $weightId = \App\Weight::findOrFail($id);
+        return $weightId;
     }
-    public function updateWeightId(int $id): array
+
+    /**
+     *
+     * @param int $id
+     * @return type
+     */
+    public function deleteWeightId(int $id)
     {
-         $weightId = \App\Weight::findOrFail($id);
-        
-            return $weightId;
+        $weight = \App\Weight::findOrFail($id);
+        return $weight;
     }
-    public function deleteWeightId(int $id): array
+
+    /**
+     *
+     * @param int $userId
+     * @param int $numberId
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+
+    public function lastNumberWeights(int $userId, int $numberId): \Illuminate\Database\Eloquent\Collection
     {
-         $weight= \App\Weight::findOrFail($id);
-         return $weight;
+
+        $weight = Weight::orderBy('created_at', 'desc')->take($numberId)->where('user_id', $userId)->get();
+
+        return $weight;
     }
-    public function viewAllWeights(int $id):array
+
+    /**
+     *
+     * @param int $userId
+     * @param array $data
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function weightsBetweenDates(int $userId, array $data): \Illuminate\Database\Eloquent\Collection
     {
-        $userId= User::findOrFail($id)->id;
-        $users = DB::table('users')
-            ->join('weights', 'users.id', '=', 'weights.user_id')
-            ->select('users.name', 'users.email','weights.id as weightId', 'users.created_at', 'users.updated_at', 'weights.value as weight', 'weights.remark')
-            ->where('users.id', '=', $userId)->orderBy('weights.id')
-            ->get();
-             $weight = json_decode(json_encode($users), true);
-         return $weight;
+        $weight = Weight::whereBetween('created_at', [$data['from'], $data['to']])->where('user_id', $userId)->get();
+
+        return $weight;
     }
-   public function lastNumberWeights(int $userId, int $numberId):array{
-         $userId= User::findOrFail($userId)->id;
-     //  dd($id);
-        
-      $weight = Weight::orderBy('created_at','desc')->take($numberId)->where('user_id', $userId)->get();
-         $weight1 = json_decode(json_encode($weight), true);
-         return $weight1;
-   }
 }
+
    

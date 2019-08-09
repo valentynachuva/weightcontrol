@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
@@ -18,7 +19,7 @@ class AuthController extends Controller
     public function __construct()
     {
         $this->middleware('auth:api', ['except' => ['login', 'registration']]);
-         $this->middleware('jwt.refresh')->only('refresh');;
+        $this->middleware('jwt.refresh')->only('refresh');;
     }
 
     /**
@@ -30,13 +31,14 @@ class AuthController extends Controller
     {
         $credentials = request(['email', 'password']);
 
-        if (! $token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+        if (!$token = auth()->attempt($credentials)) {
+            return response()->json(['error' => 'Unauthorized'], Response::HTTP_NOT_FOUND);
         }
 
         return $this->respondWithToken($token);
     }
-     /**
+
+    /**
      * User registration
      */
     public function registration()
@@ -44,14 +46,20 @@ class AuthController extends Controller
         $name = request('name');
         $email = request('email');
         $password = request('password');
+        if (!isset($name, $email, $password)) {
+            return response()->json(['message' => 'Invalid data, please, check your data'], 422);
+        } else {
+            $user = new User();
+            $user->name = $name;
+            $user->email = $email;
+            $user->password = Hash::make($password);
+            $user->save();
+//dd($user);
+            return response()->json(['message' => 'Successfully registration!'], Response::HTTP_CREATED, [
+                'Location' => $user
+            ]);
+        }
 
-        $user = new User();
-        $user->name = $name;
-        $user->email = $email;
-        $user->password = Hash::make($password);
-        $user->save();
-
-        return response()->json(['message' => 'Successfull registration!']);
     }
 
     /**
@@ -69,12 +77,6 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function logout()
-    {
-        auth()->logout();
-
-        return response()->json(['message' => 'Successfully logged out']);
-    }
 
     /**
      * Refresh a token.
@@ -83,20 +85,20 @@ class AuthController extends Controller
      */
     public function refresh()
     {
-         $token = (string)JWTAuth::getToken();
+        $token = (string)JWTAuth::getToken();
 
-    $token = JWTAuth::setToken($token)->invalidate();
+        $token = JWTAuth::setToken($token)->invalidate();
 
-    $newToken = JWTAuth::refresh($token);
+        $newToken = JWTAuth::refresh($token);
 
-    return response()->respondWithToken(['message'=>  $newToken]);
-     //  return $this->respondWithToken(auth()->refresh());
+        return response()->respondWithToken(['message' => $newToken]);
+
     }
 
     /**
      * Get the token array structure.
      *
-     * @param  string $token
+     * @param string $token
      *
      * @return \Illuminate\Http\JsonResponse
      */
