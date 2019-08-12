@@ -79,6 +79,7 @@ class WeightRepository implements WeightRepositoryInterface
     public function deleteWeightId(int $id)
     {
         $weight = \App\Weight::findOrFail($id);
+        $weight->delete($weight->all());
         return $weight;
     }
 

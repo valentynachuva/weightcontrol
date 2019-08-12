@@ -132,7 +132,7 @@ class WeightController extends Controller
             if (\App\Weight::where('user_id', $userId)->where('id', $id)->first()) {
 
                 $weightId = $this->weightRepository->deleteWeightId($id);
-                $weightId->delete($request->all());
+               // $weightId->delete($request->all());
                 return response()->json(null, Response:: HTTP_NO_CONTENT);
             } else {
                 return response()->json([
